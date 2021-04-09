@@ -4,7 +4,7 @@
 let localStream;
       
 // カメラ映像取得
-navigator.mediaDevices.getUserMedia({video: {width:200,height:150}, audio: true})
+navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true})
   .then( stream => {
   // 成功時にvideo要素にカメラ映像をセットし、再生
   const VideoElm = document.getElementById('my-video');
