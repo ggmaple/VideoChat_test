@@ -60,9 +60,9 @@ const setEventListener = mediaConnection => {
 //着信処理
 peer.on('call', mediaConnection => {
   //描画を左右反転
-  // let Ctx = canvasElt.getContext('2d');
-  // Ctx.scale(-1,1);
-  // Ctx.translate(-canvas.width, 0);
+  let Ctx = canvasElt.getContext('2d');
+  Ctx.scale(-1,1);
+  Ctx.translate(-canvas.width, 0);
   mediaConnection.answer(localStream);
   setEventListener(mediaConnection);
 });
