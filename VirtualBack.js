@@ -19,19 +19,19 @@ function _canvasUpdate(isOnVideo) {
 _canvasUpdate(true);
 
 //ぼかし背景
-function segmentBody(bodypixnet) {
-    async function renderFrame() {
-      const segmentation = await bodypixnet.segmentPerson(VideoElement);
-      const backgroundBlurAmount = 3;
-      const edgeBlurAmount = 3;
-      const flipHorizontal = true;
-      bodyPix.drawBokehEffect(
-        canvas, VideoElement, segmentation, backgroundBlurAmount,
-        edgeBlurAmount, flipHorizontal);
-      requestAnimationFrame(renderFrame);
-    }
-    renderFrame();
-  }
+// function segmentBody(bodypixnet) {
+//     async function renderFrame() {
+//       const segmentation = await bodypixnet.segmentPerson(VideoElement);
+//       const backgroundBlurAmount = 3;
+//       const edgeBlurAmount = 3;
+//       const flipHorizontal = true;
+//       bodyPix.drawBokehEffect(
+//         canvas, VideoElement, segmentation, backgroundBlurAmount,
+//         edgeBlurAmount, flipHorizontal);
+//       requestAnimationFrame(renderFrame);
+//     }
+//     renderFrame();
+//   }
 
 async function start() {
     console.log("バーチャル背景オン");
