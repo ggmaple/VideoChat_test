@@ -4,11 +4,10 @@
 let localStream;
       
 // カメラ映像取得
-navigator.mediaDevices.getUserMedia({video: {width:640,height:480}, audio: true})
+navigator.mediaDevices.getUserMedia({video: {width:200,height:150}, audio: true})
   .then( stream => {
   // 成功時にvideo要素にカメラ映像をセットし、再生
   const VideoElm = document.getElementById('my-video');
-  VideoElm.style = '-webkit-transform: scaleX(-1);';
   VideoElm.srcObject = stream;
   VideoElm.play();
   // 着信時に相手にカメラ映像を返せるように、グローバル変数に保存しておく
@@ -51,7 +50,9 @@ document.getElementById('make-call').onclick = () => {
 const setEventListener = mediaConnection => {
   mediaConnection.on('stream', stream => {
     // video要素にカメラ映像をセットして再生
-    const videoElm = document.getElementById('their-video')
+    const videoElm = document.getElementById('their-video');
+    //ミラー反転
+    videoElm.style = '-webkit-transform: scaleX(-1);';
     videoElm.srcObject = stream;
     videoElm.play();
   });
@@ -59,10 +60,6 @@ const setEventListener = mediaConnection => {
 
 //着信処理
 peer.on('call', mediaConnection => {
-  //描画を左右反転
-  let Ctx = canvasElt.getContext('2d');
-  Ctx.scale(-1,1);
-  Ctx.translate(-canvas.width, 0);
   mediaConnection.answer(localStream);
   setEventListener(mediaConnection);
 });

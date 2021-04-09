@@ -8,9 +8,10 @@ let handle;
 
 function _canvasUpdate(isOnVideo) {
   if(isOnVideo){
-    //描画を左右反転
+    // 描画を左右反転
     canvasCtx.scale(-1,1);
     canvasCtx.drawImage(VideoElement, 0, 0, -canvas.width, canvas.height);
+    // canvasCtx.drawImage(VideoElement, 0, 0, canvas.width, canvas.height);
     handle = requestAnimationFrame(_canvasUpdate);
   }else{
     cancelAnimationFrame(handle);
@@ -54,7 +55,7 @@ function VirtualBack(bodypixnet) {
     const opacity = 1.0;
     const maskBlurAmount = 1;
     const flipHorizontal = true;
-    
+
     bodyPix.drawMask(
       canvas, VideoElement, backgroundDarkeningMask, opacity, maskBlurAmount, flipHorizontal);
 
