@@ -2,6 +2,9 @@
 
 
 let localStream;
+const remoteVideo = document.getElementById('their-video');
+const theirID = null;
+const mediaConnection = null;
       
 // カメラ映像取得
 navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true})
@@ -44,17 +47,28 @@ document.getElementById('make-call').onclick = () => {
   const theirID = document.getElementById('their-id').value;
   const mediaConnection = peer.call(theirID, localStream);
   setEventListener(mediaConnection);
+
+  //退出処理
+  document.getElementById('close-call').onclick = () => {
+    mediaConnection.close(true);
+  }
+
+  mediaConnection.once('close', () => {
+    remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+    remoteVideo.srcObject = null;
+  });
 };
 
 // イベントリスナを設置する関数
 const setEventListener = mediaConnection => {
   mediaConnection.on('stream', stream => {
     // video要素にカメラ映像をセットして再生
-    const videoElm = document.getElementById('their-video');
+  
     //ミラー反転
-    videoElm.style = '-webkit-transform: scaleX(-1);';
-    videoElm.srcObject = stream;
-    videoElm.play();
+    remoteVideo.style = '-webkit-transform: scaleX(-1);';
+
+    remoteVideo.srcObject = stream;
+    remoteVideo.play();
   });
 }
 
@@ -62,4 +76,15 @@ const setEventListener = mediaConnection => {
 peer.on('call', mediaConnection => {
   mediaConnection.answer(localStream);
   setEventListener(mediaConnection);
+
+  //退出処理
+  document.getElementById('close-call').onclick = () => {
+    mediaConnection.close(true);
+  }
+
+  mediaConnection.once('close', () => {
+    remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+    remoteVideo.srcObject = null;
+  });
 });
+
