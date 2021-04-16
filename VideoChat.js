@@ -3,8 +3,16 @@
 
 let localStream;
 const remoteVideo = document.getElementById('their-video');
+var mikeMute = document.getElementById('mike-mute');
+var videoMute = document.getElementById('video-mute');
+
 const theirID = null;
 const mediaConnection = null;
+var isMikePlay = true;
+var isVideoPlay = true;
+
+var videoTrack = null;
+var audioTrack = null;
       
 // カメラ映像取得
 navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true})
@@ -15,6 +23,9 @@ navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true}
   VideoElm.play();
   // 着信時に相手にカメラ映像を返せるように、グローバル変数に保存しておく
   // localStream = stream;
+  //トラックを取得
+  videoTrack = stream.getVideoTracks()[0];;
+  audioTrack = stream.getAudioTracks()[0];;
 }).catch( error => {
   // 失敗時にはエラーログを出力
   console.error('mediaDevice.getUserMedia() error:', error);
@@ -25,8 +36,39 @@ navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true}
 var canvasElt = document.querySelector('canvas');
 
 // ストリームの取得
-var stream = canvasElt.captureStream(60); // 60 FPS
-localStream = stream;
+localStream = canvasElt.captureStream(60); // 60 FPS
+
+//マイクミュート
+mikeMute.onclick = function(){
+  if(isMikePlay === true) {
+      isMikePlay = false;
+      audioTrack.enabled = false;
+      
+      mikeMute.innerText = "ミュートオン";
+  }
+  else {
+      isMikePlay = true;
+      audioTrack.enabled = true;
+      
+      mikeMute.innerText = "ミュート解除";
+  }
+};
+
+//カメラミュート
+videoMute.onclick = function(){
+  if(isVideoPlay === true) {
+      isVideoPlay = false;
+      if(videoTrack != null) videoTrack.enabled = false;
+      
+      videoMute.innerText = "カメラをオンにする";
+  }
+  else {
+      isVideoPlay = true;
+     if(videoTrack != null) videoTrack.enabled = true;
+      
+      videoMute.innerText = "カメラをオフにする";
+  }
+};
 
 //Peer作成
 const peer = new Peer({

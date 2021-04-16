@@ -3,8 +3,10 @@
 
 const VideoElement = document.getElementById('my-video');
 const canvas = document.getElementById('canvas');
-let canvasCtx = canvas.getContext('2d');
-let handle;
+var canvasCtx = canvas.getContext('2d');
+var handle;
+var handleVB;
+var isVirtualBack = false;
 
 function _canvasUpdate(isOnVideo) {
   if(isOnVideo){
@@ -35,11 +37,17 @@ _canvasUpdate(true);
 //   }
 
 async function start() {
-    console.log("バーチャル背景オン");
+  if(!isVirtualBack){
     _canvasUpdate(false);
     let bodypixnet = await bodyPix.load();
     // segmentBody(bodypixnet);
     VirtualBack(bodypixnet);
+    isVirtualBack = true;
+  }else{
+    _canvasUpdate(true);
+    isVirtualBack = false;
+  }
+
 }
 
 //黒背景
@@ -59,7 +67,12 @@ function VirtualBack(bodypixnet) {
     bodyPix.drawMask(
       canvas, VideoElement, backgroundDarkeningMask, opacity, maskBlurAmount, flipHorizontal);
 
-    requestAnimationFrame(renderFrame);
+    if(isVirtualBack){
+      handleVB = requestAnimationFrame(renderFrame);
+    }else{
+      cancelAnimationFrame(handleVB);
+    }
+    
   }
   renderFrame();
 }
