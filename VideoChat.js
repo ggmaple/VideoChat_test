@@ -1,7 +1,5 @@
 // import Peer from 'skyway-js';
 
-
-// var localStream;
 const remoteVideo = document.getElementById('their-video');
 var mikeMute = document.getElementById('mike-mute');
 var videoMute = document.getElementById('video-mute');
@@ -17,9 +15,8 @@ var audioTrack = null;
 // キャプチャしたい canvas 要素を取得
 var canvasElt = document.querySelector('canvas');
 
-// ストリームの取得
+// ストリームの取得（canvasの映像）
 var localStream = canvasElt.captureStream(60); // 60 FPS
-// localStream.addTrack(canvasStream);
 
 // カメラ映像取得
 navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true})
@@ -28,11 +25,12 @@ navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true}
   const VideoElm = document.getElementById('my-video');
   VideoElm.srcObject = stream;
   VideoElm.play();
-  // 着信時に相手にカメラ映像を返せるように、グローバル変数に保存しておく
-  // localStream = stream;
+
   //トラックを取得
   videoTrack = stream.getVideoTracks()[0];;
   audioTrack = stream.getAudioTracks()[0];;
+
+  //音声をストリームに追加
   localStream.addTrack(audioTrack);
 }).catch( error => {
   // 失敗時にはエラーログを出力
