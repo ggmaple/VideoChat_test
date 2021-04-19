@@ -1,7 +1,7 @@
 // import Peer from 'skyway-js';
 
 
-let localStream;
+// var localStream;
 const remoteVideo = document.getElementById('their-video');
 var mikeMute = document.getElementById('mike-mute');
 var videoMute = document.getElementById('video-mute');
@@ -13,7 +13,14 @@ var isVideoPlay = true;
 
 var videoTrack = null;
 var audioTrack = null;
-      
+
+// キャプチャしたい canvas 要素を取得
+var canvasElt = document.querySelector('canvas');
+
+// ストリームの取得
+var localStream = canvasElt.captureStream(60); // 60 FPS
+// localStream.addTrack(canvasStream);
+
 // カメラ映像取得
 navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true})
   .then( stream => {
@@ -26,17 +33,12 @@ navigator.mediaDevices.getUserMedia({video: {width:400,height:300}, audio: true}
   //トラックを取得
   videoTrack = stream.getVideoTracks()[0];;
   audioTrack = stream.getAudioTracks()[0];;
+  localStream.addTrack(audioTrack);
 }).catch( error => {
   // 失敗時にはエラーログを出力
   console.error('mediaDevice.getUserMedia() error:', error);
   return;
 });
-
-// キャプチャしたい canvas 要素を取得
-var canvasElt = document.querySelector('canvas');
-
-// ストリームの取得
-localStream = canvasElt.captureStream(60); // 60 FPS
 
 //マイクミュート
 mikeMute.onclick = function(){
@@ -44,13 +46,13 @@ mikeMute.onclick = function(){
       isMikePlay = false;
       audioTrack.enabled = false;
       
-      mikeMute.innerText = "ミュートオン";
+      mikeMute.innerText = "ミュート解除";
   }
   else {
       isMikePlay = true;
       audioTrack.enabled = true;
       
-      mikeMute.innerText = "ミュート解除";
+      mikeMute.innerText = "ミュートオン";
   }
 };
 
